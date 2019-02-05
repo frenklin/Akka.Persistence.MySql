@@ -21,7 +21,7 @@ namespace Akka.Persistence.MySql.Snapshot
         public MySqlSnapshotStore(Config config) : base(config)
         {
             var sqlConfig = config.WithFallback(Extension.DefaultSnapshotConfig);
-            QueryExecutor = new MySqlSnapshotQueryExecutor(new QueryConfiguration(
+                QueryExecutor = new MySqlSnapshotQueryExecutor(new QueryConfiguration(
                 schemaName: config.GetString("schema-name"),
                 snapshotTableName: config.GetString("table-name"),
                 persistenceIdColumnName: "persistence_id",
@@ -31,8 +31,9 @@ namespace Akka.Persistence.MySql.Snapshot
                 timestampColumnName: "created_at",
                 serializerIdColumnName: "serializer_id",
                 timeout: sqlConfig.GetTimeSpan("connection-timeout"),
-                defaultSerializer: config.GetString("default-serializer")),
-                Context.System.Serialization);
+                defaultSerializer: config.GetString("default-serializer"),
+                useSequentialAccess: config.GetBoolean("use-sequential-access")),
+            Context.System.Serialization);
         }
 
         protected override DbConnection CreateDbConnection(string connectionString) => new MySqlConnection(connectionString);

@@ -23,22 +23,23 @@ namespace Akka.Persistence.MySql.Journal
         {
             var config = journalConfig.WithFallback(Extension.DefaultJournalConfig);
             QueryExecutor = new MySqlJournalQueryExecutor(new QueryConfiguration(
-                schemaName: config.GetString("schema-name"),
-                journalEventsTableName: config.GetString("table-name"),
-                metaTableName: config.GetString("metadata-table-name"),
-                persistenceIdColumnName: "persistence_id",
-                sequenceNrColumnName: "sequence_nr",
-                payloadColumnName: "payload",
-                manifestColumnName: "manifest",
-                timestampColumnName: "created_at",
-                isDeletedColumnName: "is_deleted",
-                tagsColumnName: "tags",
-                orderingColumnName: "ordering",
-                serializerIdColumnName: "serializer_id",
-                timeout: config.GetTimeSpan("connection-timeout"),
-                defaultSerializer: config.GetString("default-serializer")),
-                    Context.System.Serialization,
-                    GetTimestampProvider(config.GetString("timestamp-provider")));
+                    schemaName: config.GetString("schema-name"),
+                    journalEventsTableName: config.GetString("table-name"),
+                    metaTableName: config.GetString("metadata-table-name"),
+                    persistenceIdColumnName: "persistence_id",
+                    sequenceNrColumnName: "sequence_nr",
+                    payloadColumnName: "payload",
+                    manifestColumnName: "manifest",
+                    timestampColumnName: "created_at",
+                    isDeletedColumnName: "is_deleted",
+                    tagsColumnName: "tags",
+                    orderingColumnName: "ordering",
+                    serializerIdColumnName: "serializer_id",
+                    timeout: config.GetTimeSpan("connection-timeout"),
+                    defaultSerializer: config.GetString("default-serializer"), 
+                    useSequentialAccess: config.GetBoolean("use-sequential-access")),
+                Context.System.Serialization,
+                GetTimestampProvider(config.GetString("timestamp-provider")));
         }
 
         protected override DbConnection CreateDbConnection(string connectionString) => new MySqlConnection(connectionString);
